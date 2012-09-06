@@ -148,9 +148,16 @@ cdef class CBC:
         cdef double *rangeValues = <double *>malloc(sizeof(double) * numRows)
         cdef char *rowType = <char *>malloc(sizeof(char) * numRows)
 
-        self.v2n=dict(((variables[i],i) for i in range(numVars)))
-        self.vname2n=dict(((variables[i].name,i) for i in range(numVars)))
-        self.n2v=dict((i,variables[i]) for i in range(numVars))
+        self.v2n = dict(((variables[i],i) for i in range(numVars)))
+        self.n2v = dict((i,variables[i]) for i in range(numVars))
+        self.vname2n = dict()
+        for i in range(numVars):
+            vname = variables[i].name
+            if vname in self.vname2n:
+                raise PulpError('Found duplicated variable name.')
+            else:
+                self.vname2n[vname] = i
+
         self.c2n = {}
         self.n2c = {}
         for i, c in enumerate(constraints):
