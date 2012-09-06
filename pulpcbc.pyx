@@ -39,7 +39,7 @@ cdef extern from "coin/CbcModel.hpp":
         int getNodeCount()
         bool isProvenOptimal()
         bool isProvenInfeasible()
-        bool isProvenDualInfeasible()
+        bool isContinuousUnbounded()
         CbcModel *parentModel()
         void setSpecialOptions(int)
         int specialOptions()
@@ -255,15 +255,18 @@ cdef class CBC:
 
         free(argv)
 
-        if model.isProvenOptimal():
-            lp.status = LpStatusOptimal
-        elif model.isProvenInfeasible():
-            lp.status = LpStatusInfeasible
-        elif model.isProvenDualInfeasible():
-            lp.status = LpStatusUnbounded
-
         lp.objValue = model.getObjValue()
         lp.bestBound = model.getBestPossibleObjValue()
+
+        if model.isContinuousUnbounded() or lp.objValue >= 1e+20:
+            lp.status = LpStatusUnbounded
+        elif model.isProvenInfeasible():
+            lp.status = LpStatusInfeasible
+        elif model.isProvenOptimal():
+            lp.status = LpStatusOptimal
+        else:
+            lp.status = LpStatusUndefined
+
 
         # Set python variables
         cdef double *solution = <double *>model.bestSolution()
