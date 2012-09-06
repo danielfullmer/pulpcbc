@@ -13,6 +13,7 @@ cdef extern from "coin/OsiSolverInterface.hpp":
                          int *start, int *index, double *value,
                          double *collb, double *colbub, double *obj,
                          char *rowsen, double *rowrhs, double *rowrng)
+        void setObjSense(double)
         void setInteger(int)
         double *getColSolution()
 
@@ -139,6 +140,7 @@ cdef class CBC:
         variables = lp.variables()
         constraints = lp.constraints
 
+        cdef double objSense = LpObjSenses[lp.sense]
         cdef int numVars = len(variables)
         cdef int numRows = len(constraints)
 
@@ -213,6 +215,7 @@ cdef class CBC:
                            startsBase, indBase, elemBase,
                            lowerBounds, upperBounds, objectCoeffs,
                            rowType, rhsValues, rangeValues)
+        solver.setObjSense(objSense)
 
         # Set integer columns
         for v in lp.variables():
