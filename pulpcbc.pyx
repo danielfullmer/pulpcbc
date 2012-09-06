@@ -118,10 +118,11 @@ cdef class CBC:
     cdef CbcModel *_cb_model
     cdef callback
     cdef OsiClpSolverInterface *_solver
-    cdef options
+    cdef public mip, options
     cdef v2n, vname2n, n2v, c2n, n2c
 
-    def __init__(self, options = [], *args, **kwargs):
+    def __init__(self, mip=True, options=[], *args, **kwargs):
+        self.mip = mip
         self.options = options
 
     def available(self):
@@ -225,9 +226,11 @@ cdef class CBC:
         solver.setObjSense(objSense)
 
         # Set integer columns
-        for v in lp.variables():
-            if v.cat == LpInteger:
-                solver.setInteger(self.v2n[v])
+        if self.mip:
+            for v in lp.variables():
+                if v.cat == LpInteger:
+                    print v, v.cat
+                    solver.setInteger(self.v2n[v])
 
         # Model
         model = new CbcModel(dereference(solver))
