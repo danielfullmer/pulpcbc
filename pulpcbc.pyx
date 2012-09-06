@@ -202,11 +202,11 @@ cdef class CBC:
             if v.lowBound is not None:
                 lowerBounds[self.v2n[v]] = v.lowBound
             else:
-                lowerBounds[self.v2n[v]] = -1e20
+                lowerBounds[self.v2n[v]] = -1e100
             if v.upBound is not None:
                 upperBounds[self.v2n[v]] = v.upBound
             else:
-                upperBounds[self.v2n[v]] = 1e20
+                upperBounds[self.v2n[v]] = 1e100
             assert lowerBounds[self.v2n[v]] <= upperBounds[self.v2n[v]]
 
         # Objective coefficients
@@ -265,14 +265,16 @@ cdef class CBC:
         lp.objValue = model.getObjValue()
         lp.bestBound = model.getBestPossibleObjValue()
 
-        if model.isContinuousUnbounded() or lp.objValue >= 1e+20:
-            lp.status = LpStatusUnbounded
-        elif model.isProvenInfeasible():
-            lp.status = LpStatusInfeasible
-        elif model.isProvenOptimal():
+        lp.status = LpStatusUndefined
+
+        if model.isProvenOptimal():
             lp.status = LpStatusOptimal
-        else:
-            lp.status = LpStatusUndefined
+
+        if model.isProvenInfeasible():
+            lp.status = LpStatusInfeasible
+
+        if model.isContinuousUnbounded():
+            lp.status = LpStatusUnbounded
 
 
         # Set python variables
