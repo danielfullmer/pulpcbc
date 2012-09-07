@@ -5,7 +5,7 @@ from libcpp cimport bool
 
 from pulp import *
 
-# TODO: Multithreaded callbacks may change _cb_model. Fix this.
+# TODO: Multithreaded callbacks may change _cb_model? Fix this.
 
 cdef extern from "coin/OsiSolverInterface.hpp":
     cdef cppclass OsiSolverInterface:
