@@ -4,6 +4,6 @@ python:
   - "2.7"
 before_install:
   - sudo apt-get update -qq
-  - sudo apt-get install -qq coinor-libcbc0
+  - sudo apt-get install -qq coinor-libcbc0 cython
 install: "pip install -r requirements.txt --use-mirrors"
-script: test.py
+script: python test.py
