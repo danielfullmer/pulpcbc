@@ -4,7 +4,7 @@ A more direct Cython layer between PuLP and CBC. PuLP-CBC supports callbacks.
 
 ## Installation
 
-    $ sudo apt-get install coinor-libosi-dev coinor-libcoinutils-dev coinor-libcbc-dev
+    $ sudo apt-get install coinor-libosi-dev coinor-libcoinutils-dev coinor-libclp-dev coinor-libcbc-dev
     $ git clone https://github.com/danielfullmer/pulpcbc.git
     $ cd pulpcbc
     $ pip install -r requirements.txt
