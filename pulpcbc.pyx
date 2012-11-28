@@ -229,7 +229,6 @@ cdef class CBC:
         if self.mip:
             for v in lp.variables():
                 if v.cat == LpInteger:
-                    print v, v.cat
                     solver.setInteger(self.v2n[v])
 
         # Model
