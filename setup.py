@@ -13,7 +13,7 @@ ext_modules = [Extension('pulpcbc',
                         )]
 
 setup(
-    name = 'PuLP-CBC',
+    name = 'pulpcbc',
     version = '0.1',
     cmdclass = {'build_ext': build_ext},
     ext_modules = ext_modules,
